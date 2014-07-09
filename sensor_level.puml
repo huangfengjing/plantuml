@@ -1,0 +1,59 @@
+@startuml
+object Lifecycle {
+    init()
+    start()
+    pause()
+    stop()
+}
+object ModuleContainer {
+    moduleManager
+    eventPool
+    eventPipeline
+    requireModule(MODULE_NAME) throws ModuleException
+    releaseModule(MODULE_NAME)
+    listenModule(MODULE_NAME, Callback)
+    unlistenModule(MODULE_NAME)
+}
+object ModuleManager {
+    listModules()
+}
+object EventPool {
+    putEvent(EventData data)
+    popEvent()
+}
+object EventPipeline {
+    EventData execute(EventPool, EventData)
+}
+object Module {
+    install(ModuleManager manager) throws DeviceNotFoundException
+    registerListener(ModuleListener)
+    onEventChanged(EventData)
+}
+object EventData {
+    values(x, y, z)
+    MODULE_NAME
+    accuracy
+    timestamp
+    extraInfo
+}
+
+
+Lifecycle <|-right- ModuleContainer
+Lifecycle <|-- Module
+ModuleContainer *-- ModuleManager
+ModuleContainer *-- EventPool
+ModuleContainer *-- EventPipeline
+ModuleManager *-- "n" Module
+Module *-- EventData
+
+
+object ModuleException
+object ModuleNotFoundException
+object DeviceNotFoundException
+object NoPermissionException
+object UnknownException
+ModuleException <|-- ModuleNotFoundException
+ModuleException <|-- DeviceNotFoundException
+ModuleException <|-- NoPermissionException
+ModuleException <|-- UnknownException
+@enduml
