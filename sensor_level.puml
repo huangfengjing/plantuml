@@ -30,11 +30,13 @@ object Module {
     onEventChanged(EventData)
 }
 object EventData {
-    values(x, y, z)
+    data(x, y, z, longitude, latitude ...)
+    extraInfo
+}
+object EventMetaData {
     MODULE_NAME
     accuracy
     timestamp
-    extraInfo
 }
 
 
@@ -45,6 +47,7 @@ ModuleContainer *-- EventPool
 ModuleContainer *-- EventPipeline
 ModuleManager *-- "n" Module
 Module *-- EventData
+EventData *-right- EventMetaData
 
 
 object ModuleException
