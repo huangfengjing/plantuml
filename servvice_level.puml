@@ -1,0 +1,54 @@
+@startuml
+
+object PromotionService {
+    configService,
+    permissionManager,
+    apiManager,
+    promotionInterceptorList,
+    promotionAudit
+}
+
+object ApiManager
+object PermissionManager
+object Configuration
+
+object PromotionApi {
+    module,
+    int getPriority()
+    boolean support(Action, Param)
+    Result execute(Action, Param, Callback)
+}
+
+object ShakeApi {
+    boolean isShaking()
+}
+
+object UniversalApi {
+
+}
+
+object PromotionInterceptor {
+    boolean beforeInvoke(Action, Param)
+    void afterInvoke(Action, Param, Result)
+}
+
+object PromotionAudit {
+
+}
+
+object ConfigService {
+    void syncConfig()
+}
+
+
+PromotionApi <|-- ShakeApi
+PromotionApi <|-- UniversalApi
+
+PromotionService *-- ApiManager
+ApiManager *-- "n" PromotionApi
+ApiManager *-- PromotionInterceptor
+PromotionInterceptor <|-- PromotionAudit
+PromotionService *-- PermissionManager
+PromotionService *-- ConfigService
+ConfigService *-- Configuration
+@enduml
